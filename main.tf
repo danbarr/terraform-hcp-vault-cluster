@@ -13,7 +13,7 @@ locals {
   # Supported regions for HCP Vault as of July 2023
   supported_regions = {
     "aws"   = ["us-east-1", "us-east-2", "us-west-2", "ca-central-1", "eu-central-1", "eu-west-1", "eu-west-2", "ap-northeast-1", "ap-southeast-1", "ap-southeast-2"]
-    "azure" = ["westus2", "eastus", "centralus", "eastus2", "westeurope", "northeurope", "francecentral", "uksouth"]
+    "azure" = ["westus2", "eastus", "centralus", "eastus2", "canadacentral", "westeurope", "northeurope", "francecentral", "uksouth", "southeastasia", "japaneast", "australiasoutheast"]
   }
 
   region_short = replace(var.region, "-", "")

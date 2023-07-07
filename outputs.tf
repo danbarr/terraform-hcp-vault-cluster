@@ -4,7 +4,7 @@ output "hvn_id" {
 }
 
 output "vault_cluster_id" {
-  value = local.cluster_id
+  value       = local.cluster_id
   description = "ID of the HCP Vault cluster."
 }
 
