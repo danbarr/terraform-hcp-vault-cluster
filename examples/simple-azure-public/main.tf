@@ -15,6 +15,7 @@ module "hcp_vault_cluster" {
   source = "../../"
 
   prefix          = "example"
+  create_hvn      = true
   cloud_provider  = "azure"
   region          = "centralus"
   vault_tier      = "dev"

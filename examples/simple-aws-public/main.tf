@@ -15,7 +15,7 @@ module "hcp_vault_cluster" {
   source = "../../"
 
   prefix          = "example"
-  create_hvn = true
+  create_hvn      = true
   cloud_provider  = "aws"
   region          = "us-east-1"
   vault_tier      = "dev"
