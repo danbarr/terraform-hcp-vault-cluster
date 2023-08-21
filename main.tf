@@ -22,7 +22,7 @@ locals {
   cluster_id = var.vault_cluster_id != "" ? var.vault_cluster_id : "${var.prefix}-vault-${var.cloud_provider}-${local.region_short}"
 }
 
-resource "hcp_hvn" "vault" {
+resource "hcp_hvn" "this" {
   count = var.create_hvn ? 1 : 0
 
   hvn_id         = local.hvn_id
@@ -38,8 +38,13 @@ resource "hcp_hvn" "vault" {
   }
 }
 
+moved {
+  from = hcp_hvn.vault
+  to   = hcp_hvn.this
+}
+
 resource "hcp_vault_cluster" "this" {
-  hvn_id          = local.hvn_id
+  hvn_id          = var.create_hvn ? hcp_hvn.this[0].hvn_id : local.hvn_id
   cluster_id      = local.cluster_id
   public_endpoint = var.public_endpoint
   tier            = var.vault_tier
