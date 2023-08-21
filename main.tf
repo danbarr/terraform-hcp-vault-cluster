@@ -44,10 +44,11 @@ moved {
 }
 
 resource "hcp_vault_cluster" "this" {
-  hvn_id          = var.create_hvn ? hcp_hvn.this[0].hvn_id : local.hvn_id
-  cluster_id      = local.cluster_id
-  public_endpoint = var.public_endpoint
-  tier            = var.vault_tier
+  hvn_id            = var.create_hvn ? hcp_hvn.this[0].hvn_id : local.hvn_id
+  cluster_id        = local.cluster_id
+  public_endpoint   = var.public_endpoint
+  tier              = var.vault_tier
+  min_vault_version = var.min_vault_version
 }
 
 resource "hcp_vault_cluster_admin_token" "admin" {

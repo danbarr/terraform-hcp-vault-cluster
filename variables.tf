@@ -80,6 +80,12 @@ variable "vault_tier" {
   }
 }
 
+variable "min_vault_version" {
+  type        = string
+  description = "The minimum Vault version to use when creating the cluster. If not specified, it is defaulted to the version that is currently recommended by HCP."
+  default     = null
+}
+
 variable "public_endpoint" {
   type        = bool
   description = "Whether the Vault cluster should have a public endpoint. If false, you will need to set up HVN peering to reach the cluster."
