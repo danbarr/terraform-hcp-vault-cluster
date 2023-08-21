@@ -7,7 +7,8 @@ By default a HashiCorp Virtual Network is also created, unless `create_hvn = fal
 Prerequisites:
 
 - An HCP organization
-- HCP "Contributor" credentials set as environment variables `HCP_CLIENT_ID` and `HCP_CLIENT_SECRET` (see the HCP provider [authentication guide](https://registry.terraform.io/providers/hashicorp/hcp/latest/docs/guides/auth))
+- HCP "Contributor" credentials set as environment variables `HCP_CLIENT_ID` and `HCP_CLIENT_SECRET` (see the HCP provider [authentication guide](https://registry.terraform.io/providers/hashicorp/hcp/latest/docs/guides/auth)). Optionally specify `HCP_PROJECT_ID`. If not included, the oldest project in the organization will be used.
+  - If using a project-level service principal, `HCP_PROJECT_ID` is required
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -31,7 +32,7 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [hcp_hvn.vault](https://registry.terraform.io/providers/hashicorp/hcp/latest/docs/resources/hvn) | resource |
+| [hcp_hvn.this](https://registry.terraform.io/providers/hashicorp/hcp/latest/docs/resources/hvn) | resource |
 | [hcp_vault_cluster.this](https://registry.terraform.io/providers/hashicorp/hcp/latest/docs/resources/vault_cluster) | resource |
 | [hcp_vault_cluster_admin_token.admin](https://registry.terraform.io/providers/hashicorp/hcp/latest/docs/resources/vault_cluster_admin_token) | resource |
 
