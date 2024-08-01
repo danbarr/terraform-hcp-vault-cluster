@@ -44,6 +44,7 @@ moved {
 }
 
 resource "hcp_vault_cluster" "this" {
+  depends_on        = [hcp_hvn.this]
   hvn_id            = var.create_hvn ? hcp_hvn.this[0].hvn_id : local.hvn_id
   cluster_id        = local.cluster_id
   public_endpoint   = var.public_endpoint
