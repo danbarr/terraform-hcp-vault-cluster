@@ -6,7 +6,7 @@ variable "prefix" {
 variable "create_hvn" {
   type        = bool
   description = "Whether to create a new HVN or use an existing one."
-  default     = true
+  default     = false
 }
 
 variable "hvn_id" {
@@ -15,32 +15,53 @@ variable "hvn_id" {
   default     = ""
 
   validation {
-    condition = var.hvn_id == "" ? true : (
-      can(regex("[a-zA-Z0-9-]", var.hvn_id)) &&
-      length(var.hvn_id) >= 3 &&
-      length(var.hvn_id) <= 36
-    )
+    condition     = var.hvn_id == "" ? true : can(regex("^[a-zA-Z0-9-]{3,36}$", var.hvn_id))
     error_message = "HVN ID must be 3-36 characters and can only include letters, numbers, and hyphens."
+  }
+  validation {
+    condition     = var.create_hvn ? true : can(regex("^[a-zA-Z0-9-]{3,36}$", var.hvn_id))
+    error_message = "You must specify an existing HVN ID since `create_hvn = false`."
   }
 }
 
 variable "cloud_provider" {
   type        = string
-  description = "Cloud provider where the HVN and Vault cluster will be located. Only used if `create_hvn = true`."
-  default     = "aws"
+  description = "Cloud provider where the HVN and Vault cluster will be located. Must be specified if `create_hvn = true`."
+  default     = null
 
   validation {
-    condition     = contains(["", "aws", "azure"], var.cloud_provider)
+    condition     = var.create_hvn ? contains(["aws", "azure"], var.cloud_provider) : true
     error_message = "The supported providers are 'aws' and 'azure'."
   }
 }
 
-# Supported AWS regions: https://developer.hashicorp.com/hcp/docs/hcp/supported-env/aws
-# Supported Azure regions: https://developer.hashicorp.com/hcp/docs/hcp/supported-env/azure
+locals {
+  # Supported regions for HCP Vault as of August 2024
+  # AWS: https://developer.hashicorp.com/hcp/docs/hcp/supported-env/aws
+  # Azure: https://developer.hashicorp.com/hcp/docs/hcp/supported-env/azure
+  supported_regions = {
+    "aws"   = ["us-east-1", "us-east-2", "us-west-2", "ca-central-1", "eu-west-1", "eu-west-2", "eu-central-1", "ap-northeast-1", "ap-southeast-1", "ap-southeast-2"]
+    "azure" = ["westus2", "eastus", "centralus", "eastus2", "canadacentral", "westeurope", "northeurope", "francecentral", "uksouth", "southeastasia", "japaneast", "australiasoutheast"]
+  }
+}
+
 variable "region" {
   type        = string
-  description = "Region where the HVN and Vault cluster will be located. Only used if `create_hvn = true`."
-  default     = "us-east-1"
+  description = "Region where the HVN and Vault cluster will be located. Must be specified if `create_hvn = true`."
+  default     = null
+
+  validation {
+    condition     = var.create_hvn ? var.region != "" : true
+    error_message = "Region must be specified if `create_hvn = true`."
+  }
+  validation {
+    condition     = var.cloud_provider == "aws" ? contains(local.supported_regions["aws"], var.region) : true
+    error_message = "Must specify a supported AWS region. Refer to https://developer.hashicorp.com/hcp/docs/hcp/supported-env/aws"
+  }
+  validation {
+    condition     = var.cloud_provider == "azure" ? contains(local.supported_regions["azure"], var.region) : true
+    error_message = "Must specify a supported Azure region. Refer to https://developer.hashicorp.com/hcp/docs/hcp/supported-env/azure"
+  }
 }
 
 variable "cidr_block" {
@@ -60,11 +81,7 @@ variable "vault_cluster_id" {
   default     = ""
 
   validation {
-    condition = var.vault_cluster_id == "" ? true : (
-      can(regex("[a-zA-Z0-9-]", var.vault_cluster_id)) &&
-      length(var.vault_cluster_id) >= 3 &&
-      length(var.vault_cluster_id) <= 36
-    )
+    condition     = var.vault_cluster_id == "" ? true : can(regex("^[a-zA-Z0-9-]{3,36}$", var.vault_cluster_id))
     error_message = "Cluster ID must be 3-36 characters and can only include letters, numbers, and hyphens."
   }
 }
