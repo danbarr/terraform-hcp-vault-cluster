@@ -15,7 +15,7 @@ Prerequisites:
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.2 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9 |
 | <a name="requirement_hcp"></a> [hcp](#requirement\_hcp) | >= 0.57 |
 
 ## Providers
@@ -24,10 +24,6 @@ Prerequisites:
 |------|---------|
 | <a name="provider_hcp"></a> [hcp](#provider\_hcp) | >= 0.57 |
 
-## Modules
-
-No modules.
-
 ## Resources
 
 | Name | Type |
@@ -35,18 +31,20 @@ No modules.
 | [hcp_hvn.this](https://registry.terraform.io/providers/hashicorp/hcp/latest/docs/resources/hvn) | resource |
 | [hcp_vault_cluster.this](https://registry.terraform.io/providers/hashicorp/hcp/latest/docs/resources/vault_cluster) | resource |
 | [hcp_vault_cluster_admin_token.admin](https://registry.terraform.io/providers/hashicorp/hcp/latest/docs/resources/vault_cluster_admin_token) | resource |
+| [hcp_hvn.selected](https://registry.terraform.io/providers/hashicorp/hcp/latest/docs/data-sources/hvn) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cidr_block"></a> [cidr\_block](#input\_cidr\_block) | CIDR block for the HVN. | `string` | `"172.25.16.0/20"` | no |
-| <a name="input_cloud_provider"></a> [cloud\_provider](#input\_cloud\_provider) | Cloud provider where the HVN and Vault cluster will be located. Only used if `create_hvn = true`. | `string` | `"aws"` | no |
-| <a name="input_create_hvn"></a> [create\_hvn](#input\_create\_hvn) | Whether to create a new HVN or use an existing one. | `bool` | `true` | no |
-| <a name="input_hvn_id"></a> [hvn\_id](#input\_hvn\_id) | ID of the HVN. If `create_hvn = false`, this must be set to an existing HVN ID. If left blank and `create_hvn = true`, an ID will be generated for you. | `string` | `""` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | This prefix will be used to generate unique resource names. | `string` | n/a | yes |
+| <a name="input_cidr_block"></a> [cidr\_block](#input\_cidr\_block) | CIDR block for the HVN. | `string` | `"172.25.16.0/20"` | no |
+| <a name="input_cloud_provider"></a> [cloud\_provider](#input\_cloud\_provider) | Cloud provider where the HVN and Vault cluster will be located. Must be specified if `create_hvn = true`. | `string` | `null` | no |
+| <a name="input_create_hvn"></a> [create\_hvn](#input\_create\_hvn) | Whether to create a new HVN or use an existing one. | `bool` | `false` | no |
+| <a name="input_hvn_id"></a> [hvn\_id](#input\_hvn\_id) | ID of the HVN. If `create_hvn = false`, this must be set to an existing HVN ID. If left blank and `create_hvn = true`, an ID will be generated for you. | `string` | `""` | no |
+| <a name="input_min_vault_version"></a> [min\_vault\_version](#input\_min\_vault\_version) | The minimum Vault version to use when creating the cluster. If not specified, it is defaulted to the version that is currently recommended by HCP. | `string` | `null` | no |
 | <a name="input_public_endpoint"></a> [public\_endpoint](#input\_public\_endpoint) | Whether the Vault cluster should have a public endpoint. If false, you will need to set up HVN peering to reach the cluster. | `bool` | `false` | no |
-| <a name="input_region"></a> [region](#input\_region) | Region where the HVN and Vault cluster will be located. Only used if `create_hvn = true`. | `string` | `"us-east-1"` | no |
+| <a name="input_region"></a> [region](#input\_region) | Region where the HVN and Vault cluster will be located. Must be specified if `create_hvn = true`. | `string` | `null` | no |
 | <a name="input_vault_cluster_id"></a> [vault\_cluster\_id](#input\_vault\_cluster\_id) | ID for the Vault cluster. If left blank, an ID will be generated for you. | `string` | `""` | no |
 | <a name="input_vault_tier"></a> [vault\_tier](#input\_vault\_tier) | Sizing tier of the Vault cluster. | `string` | `"dev"` | no |
 
