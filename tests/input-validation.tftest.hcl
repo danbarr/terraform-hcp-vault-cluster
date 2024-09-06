@@ -1,10 +1,13 @@
 variables {
-  prefix = "test"
+  prefix         = "test"
+  create_hvn     = true
+  cloud_provider = "aws"
+  region         = "us-east-1"
 }
 
 mock_provider "hcp" {}
 
-run "default_values" {
+run "min_valid_inputs" {
   command = plan
 }
 

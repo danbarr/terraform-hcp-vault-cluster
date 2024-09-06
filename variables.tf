@@ -6,7 +6,7 @@ variable "prefix" {
 variable "create_hvn" {
   type        = bool
   description = "Whether to create a new HVN or use an existing one."
-  default     = true
+  default     = false
 }
 
 variable "hvn_id" {
@@ -27,7 +27,7 @@ variable "hvn_id" {
 variable "cloud_provider" {
   type        = string
   description = "Cloud provider where the HVN and Vault cluster will be located. Must be specified if `create_hvn = true`."
-  default     = "aws"
+  default     = null
 
   validation {
     condition     = var.create_hvn ? contains(["aws", "azure"], var.cloud_provider) : true
@@ -48,10 +48,10 @@ locals {
 variable "region" {
   type        = string
   description = "Region where the HVN and Vault cluster will be located. Must be specified if `create_hvn = true`."
-  default     = "us-east-2"
+  default     = null
 
   validation {
-    condition     = var.create_hvn ? var.region != null : true
+    condition     = var.create_hvn ? var.region != "" : true
     error_message = "Region must be specified if `create_hvn = true`."
   }
   validation {
